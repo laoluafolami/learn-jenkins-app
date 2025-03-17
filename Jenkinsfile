@@ -18,18 +18,17 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
-            agent any
 
-    stages {
-        stage('Build') {
+        stage('Test') {
             steps {
                 script {
-                    docker.image('node:18-alpine').inside('--entrypoint=""')
-            steps {
-                sh 'test -f build/index.html'
-                npm test
-                '''
+                    docker.image('node:18-alpine').inside('--entrypoint=""') {
+                        sh '''
+                            test -f build/index.html
+                            npm test
+                        '''
+                    }
+                }
             }
         }
     }
