@@ -30,6 +30,10 @@ pipeline {
                     }
                 }
             }
+        stage('Deploy') {
+            
+        }  
         }
+    
     }
 }
