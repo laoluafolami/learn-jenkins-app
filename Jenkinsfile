@@ -1,39 +1,40 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18-alpine'
+            args '--entrypoint=""'
+        }
+    }
 
     stages {
         stage('Build') {
             steps {
-                script {
-                    docker.image('node:18-alpine').inside('--entrypoint=""') {
-                        sh '''
-                            ls -la
-                            node --version
-                            npm --version
-                            npm ci
-                            npm run build
-                            ls -la
-                        '''
-                    }
-                }
+                sh '''
+                    ls -la
+                    node --version
+                    npm --version
+                    npm ci
+                    npm run build
+                    ls -la
+                '''
             }
         }
 
         stage('Test') {
             steps {
-                script {
-                    docker.image('node:18-alpine').inside('--entrypoint=""') {
-                        sh '''
-                            test -f build/index.html
-                            npm test
-                        '''
-                    }
-                }
+                sh '''
+                    test -f build/index.html
+                    npm test
+                '''
             }
-        stage('Deploy') {
-            
-        }  
         }
-    
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploy step goes here!'
+                // Example:
+                // sh 'scp build/* user@server:/path/to/deploy/'
+            }
+        }
     }
 }
